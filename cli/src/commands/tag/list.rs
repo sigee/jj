@@ -1,4 +1,4 @@
-// Copyright 2020-2024 The Jujutsu Authors
+// Copyright 2025 The Jujutsu Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,13 +23,6 @@ use crate::commit_templater::CommitRef;
 use crate::complete;
 use crate::templater::TemplateRenderer;
 use crate::ui::Ui;
-
-/// Manage tags.
-#[derive(clap::Subcommand, Clone, Debug)]
-pub enum TagCommand {
-    #[command(visible_alias("l"))]
-    List(TagListArgs),
-}
 
 /// List tags.
 #[derive(clap::Args, Clone, Debug)]
@@ -58,17 +51,7 @@ pub struct TagListArgs {
     template: Option<String>,
 }
 
-pub fn cmd_tag(
-    ui: &mut Ui,
-    command: &CommandHelper,
-    subcommand: &TagCommand,
-) -> Result<(), CommandError> {
-    match subcommand {
-        TagCommand::List(args) => cmd_tag_list(ui, command, args),
-    }
-}
-
-fn cmd_tag_list(
+pub fn cmd_tag_list(
     ui: &mut Ui,
     command: &CommandHelper,
     args: &TagListArgs,
@@ -94,9 +77,9 @@ fn cmd_tag_list(
     for (name, target) in view.tags() {
         if !args.names.is_empty()
             && !args
-                .names
-                .iter()
-                .any(|pattern| pattern.is_match(name.as_str()))
+            .names
+            .iter()
+            .any(|pattern| pattern.is_match(name.as_str()))
         {
             continue;
         }
