@@ -71,6 +71,7 @@ mod test_split_command;
 mod test_squash_command;
 mod test_status_command;
 mod test_tag_list_command;
+mod test_tag_create_command;
 mod test_templater;
 mod test_undo;
 mod test_util_command;

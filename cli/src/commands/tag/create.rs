@@ -12,34 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-mod list;
-mod create;
-
 use crate::cli_util::CommandHelper;
+use crate::cli_util::RevisionArg;
 use crate::command_error::CommandError;
+use crate::complete;
 use crate::ui::Ui;
+use clap_complete::ArgValueCompleter;
 
-use self::list::cmd_tag_list;
-use self::list::TagListArgs;
-use self::create::cmd_tag_create;
-use self::create::TagCreateArgs;
+#[derive(clap::Args, Clone, Debug)]
+pub struct TagCreateArgs {
+    /// Tag to create
+    #[arg(required = true)]
+    pub tag: String,
 
-/// Manage tags.
-#[derive(clap::Subcommand, Clone, Debug)]
-pub enum TagCommand {
-    #[command(visible_alias("l"))]
-    List(TagListArgs),
-    #[command(visible_alias("c"))]
-    Create(TagCreateArgs),
+    /// The tag's target revision
+    #[arg(
+        long, short,
+        visible_alias = "to",
+        value_name = "REVSET",
+        add = ArgValueCompleter::new(complete::revset_expression_all),
+    )]
+    revision: Option<RevisionArg>,
 }
 
-pub fn cmd_tag(
+pub fn cmd_tag_create(
     ui: &mut Ui,
     command: &CommandHelper,
-    subcommand: &TagCommand,
+    args: &TagCreateArgs,
 ) -> Result<(), CommandError> {
-    match subcommand {
-        TagCommand::List(args) => cmd_tag_list(ui, command, args),
-        TagCommand::Create(args) => cmd_tag_create(ui, command, args),
-    }
+    // let workspace_command = command.workspace_helper(ui)?;
+    // println!("UI: {}", ui);
+    // println!("Command: {}", command);
+    // println!("Args: {}", args);
+
+    writeln!(ui.hint_default(), "Tag create")?;
+
+    Ok(())
 }
